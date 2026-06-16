@@ -1,0 +1,75 @@
+# Aethersailor Current-Safe local overlay for OpenClash SafeOps Skill v7.3
+# Source snapshot: yjw8448/Aethersailor-Custom_OpenClash_Rules and Aethersailor Wiki.
+# Purpose: apply Aethersailor-style Fake-IP/DNS/sniffer/rule principles to ONE existing YAML.
+# Safety: do not include proxies, proxy-groups, proxy-providers, subscription URLs, or OpenWrt UCI system settings.
+# Notes:
+# - Fake-IP only; do not mix with Redir-Host.
+# - Use Nameserver only; keep fallback empty by default.
+# - Do not enable deprecated ad-block scripts automatically.
+# - Remote rule-providers should be health-checked before use.
+
+dns:
+  enable: true
+  listen: 127.0.0.1:7874
+  ipv6: true
+  enhanced-mode: fake-ip
+  fake-ip-range: 198.18.0.1/16
+  respect-rules: true
+  use-hosts: true
+  fake-ip-filter:
+    - "*.lan"
+    - "*.local"
+    - localhost
+    - localhost.ptlogin2.qq.com
+    - "+.msftconnecttest.com"
+    - "+.msftncsi.com"
+    - "+.router.asus.com"
+    - "+.miwifi.com"
+    - "+.tplinkwifi.net"
+    - "+.home.arpa"
+  nameserver:
+    - system
+  fallback: []
+  default-nameserver: []
+
+sniffer:
+  enable: true
+  force-dns-mapping: true
+  parse-pure-ip: true
+  override-destination: true
+  sniff:
+    HTTP:
+      ports:
+        - 80
+        - 8080-8880
+      override-destination: true
+    TLS:
+      ports:
+        - 443
+        - 8443
+    QUIC:
+      ports:
+        - 443
+        - 8443
+
+geodata-mode: true
+
+rules:
+  - IP-CIDR,10.0.0.0/8,DIRECT,no-resolve
+  - IP-CIDR,172.16.0.0/12,DIRECT,no-resolve
+  - IP-CIDR,192.168.0.0/16,DIRECT,no-resolve
+  - IP-CIDR,127.0.0.0/8,DIRECT,no-resolve
+  - IP-CIDR6,fc00::/7,DIRECT,no-resolve
+  - IP-CIDR6,fe80::/10,DIRECT,no-resolve
+  - GEOSITE,private,DIRECT
+  - GEOIP,private,DIRECT,no-resolve
+  - GEOSITE,google-cn,DIRECT
+  - GEOSITE,category-games@cn,DIRECT
+  - GEOSITE,category-game-platforms-download,DIRECT
+  - GEOSITE,category-public-tracker,DIRECT
+  - DOMAIN-SUFFIX,tracker.m-team.cc,DIRECT
+  - DOMAIN-SUFFIX,ipv6-tracker.m-team.cc,DIRECT
+  - DOMAIN-SUFFIX,pt.btschool.club,DIRECT
+  - DOMAIN-SUFFIX,jpopsuki.eu,DIRECT
+  - GEOSITE,cn,DIRECT
+  - GEOIP,CN,DIRECT,no-resolve

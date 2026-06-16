@@ -1,0 +1,50 @@
+# Safe overlay for applying an FFAni-style Redir-Host + SmartDNS profile to ONE existing OpenClash config.
+# This file intentionally omits proxies/proxy-groups/proxy-providers to avoid changing subscriptions or nodes.
+# Apply only through scripts/openclash_template_apply.py after backing up and confirming SmartDNS ports.
+
+dns:
+  enable: true
+  listen: 127.0.0.1:7874
+  ipv6: true
+  enhanced-mode: redir-host
+  prefer-h3: false
+  respect-rules: true
+  use-hosts: true
+  nameserver-policy:
+    geosite:cn,private,apple:
+      - 127.0.0.1:6053
+    geoip:private:
+      - 127.0.0.1:6053
+  nameserver:
+    - 127.0.0.1:6553
+  fallback: []
+  default-nameserver: []
+
+sniffer:
+  enable: true
+  force-dns-mapping: true
+  parse-pure-ip: true
+  override-destination: true
+  sniff:
+    HTTP:
+      ports:
+        - 80
+        - 8080-8880
+      override-destination: true
+    TLS:
+      ports:
+        - 443
+        - 8443
+    QUIC:
+      ports:
+        - 443
+        - 8443
+
+rules:
+  - DOMAIN-SUFFIX,daydream.dmhy.best,DIRECT
+  - DOMAIN-SUFFIX,probe.skyey2.com,DIRECT
+  - DOMAIN-SUFFIX,jpopsuki.eu,DIRECT
+  - DOMAIN-SUFFIX,pt.btschool.club,DIRECT
+  - DOMAIN-SUFFIX,tracker.m-team.cc,DIRECT
+  - DOMAIN-SUFFIX,ipv6-tracker.m-team.cc,DIRECT
+  - DOMAIN-SUFFIX,tracker.52dic.vip,DIRECT
