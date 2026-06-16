@@ -103,6 +103,19 @@ User: "LuCI 显示无订阅信息"
 | 🟢 Always backup before write | `openclash_backup.sh` runs first |
 | 🔐 All reports redacted | 8-mode unified redaction pipeline |
 
+### 📚 References
+
+| Source | Authority | Link |
+|--------|-----------|------|
+| 🏛️ OpenClash Wiki | Highest | [vernesong/OpenClash/wiki](https://github.com/vernesong/OpenClash/wiki) |
+| 🏛️ OpenWrt Docs | Highest | [openwrt.org/docs](https://openwrt.org/docs/start) |
+| 🏛️ Mihomo/MetaCubeX | Highest | [wiki.metacubex.one](https://wiki.metacubex.one/en/config/) |
+| 📘 Agent Skills Spec | High | [agentskills.io](https://agentskills.io/specification) |
+| 📗 Aethersailor Rules | Medium | [Aethersailor/Custom_OpenClash_Rules](https://github.com/Aethersailor/Custom_OpenClash_Rules/wiki/OpenClash-%E8%AE%BE%E7%BD%AE%E6%96%B9%E6%A1%88) |
+| 📗 FFAni Config Guide | Medium | [ffani.com](https://ffani.com/post/openwrt-openclash-recommended-config-guide/) |
+
+> Full authority-graded index with safe translation rules: [`references/upstream-sources.md`](references/upstream-sources.md)
+
 ### 📄 License
 
 MIT — see [LICENSE](LICENSE).
@@ -202,6 +215,19 @@ openclash-safeops/
 | 🟡 写入脚本需显式 `--apply` + 环境变量 | `I_UNDERSTAND_SAFEOPS_WRITE=1` |
 | 🟢 写入前自动备份 | `openclash_backup.sh` 先执行 |
 | 🔐 全部报告脱敏 | 8 模式统一脱敏流水线 |
+
+### 📚 参考资料
+
+| 参考源 | 权威等级 | 链接 |
+|--------|----------|------|
+| 🏛️ OpenClash Wiki | 最高 | [vernesong/OpenClash/wiki](https://github.com/vernesong/OpenClash/wiki) |
+| 🏛️ OpenWrt 官方文档 | 最高 | [openwrt.org/docs](https://openwrt.org/docs/start) |
+| 🏛️ Mihomo/MetaCubeX | 最高 | [wiki.metacubex.one](https://wiki.metacubex.one/en/config/) |
+| 📘 Agent Skills 规范 | 高 | [agentskills.io](https://agentskills.io/specification) |
+| 📗 Aethersailor 规则 | 中 | [Aethersailor/Custom_OpenClash_Rules](https://github.com/Aethersailor/Custom_OpenClash_Rules/wiki/OpenClash-%E8%AE%BE%E7%BD%AE%E6%96%B9%E6%A1%88) |
+| 📗 FFAni 配置指南 | 中 | [ffani.com](https://ffani.com/post/openwrt-openclash-recommended-config-guide/) |
+
+> 完整权威分级索引与安全翻译规则：[`references/upstream-sources.md`](references/upstream-sources.md)
 
 ### 📄 许可证
 
