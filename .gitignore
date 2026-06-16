@@ -1,0 +1,39 @@
+# OS / editor
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+.vscode/
+.idea/
+
+# Logs / temp
+*.log
+*.tmp
+*.bak
+*.old
+*.pid
+/tmp/
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+
+# Archives generated locally
+*.zip
+*.tar.gz
+
+# Secrets / private config
+.env
+*.env
+!*.env.example
+*secret*
+*token*
+
+*.pyc
+*.pyo
+*.backup
+*.secret
+*.token
+*.key

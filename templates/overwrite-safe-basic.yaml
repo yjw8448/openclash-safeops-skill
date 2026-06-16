@@ -1,0 +1,13 @@
+# SafeOps overwrite-safe-basic.yaml
+# Do not paste blindly. Verify group names and OpenClash overwrite syntax supported by your version.
+
+rules:
+  - DOMAIN-SUFFIX,local,DIRECT
+  - DOMAIN-SUFFIX,lan,DIRECT
+  - IP-CIDR,10.0.0.0/8,DIRECT,no-resolve
+  - IP-CIDR,172.16.0.0/12,DIRECT,no-resolve
+  - IP-CIDR,192.168.0.0/16,DIRECT,no-resolve
+  - IP-CIDR,127.0.0.0/8,DIRECT,no-resolve
+  - GEOSITE,cn,DIRECT
+  - GEOIP,CN,DIRECT
+  - MATCH,Proxy

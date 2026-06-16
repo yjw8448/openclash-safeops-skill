@@ -1,0 +1,18 @@
+# SafeOps AI/dev overwrite rules.
+# Required groups: AI, Proxy.
+
+rules:
+  - DOMAIN-SUFFIX,openai.com,AI
+  - DOMAIN-SUFFIX,chatgpt.com,AI
+  - DOMAIN-SUFFIX,anthropic.com,AI
+  - DOMAIN-SUFFIX,claude.ai,AI
+  - DOMAIN-SUFFIX,ai.com,AI
+  - DOMAIN-SUFFIX,github.com,Proxy
+  - DOMAIN-SUFFIX,githubusercontent.com,Proxy
+  - DOMAIN-SUFFIX,githubassets.com,Proxy
+  - DOMAIN-SUFFIX,ghcr.io,Proxy
+  - DOMAIN-SUFFIX,docker.com,Proxy
+  - DOMAIN-SUFFIX,docker.io,Proxy
+  - DOMAIN-SUFFIX,npmjs.org,Proxy
+  - DOMAIN-SUFFIX,pypi.org,Proxy
+  - DOMAIN-SUFFIX,pythonhosted.org,Proxy
