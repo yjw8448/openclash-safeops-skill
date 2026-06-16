@@ -4,7 +4,7 @@ Use when the user asks to configure exactly one current OpenClash YAML using Aet
 
 ## Decision path
 
-1. Confirm one explicit target YAML, for example `/etc/openclash/config/pqjc(2).yaml`.
+1. Confirm one explicit target YAML, for example `/etc/openclash/config/config-a(2).yaml`.
 2. Run multi-subscription and binding audits. Stop if the target mapping is unknown or if LuCI shows `无订阅信息`.
 3. Detect real strategy groups in the target YAML. Map `ChatGPT`, `AI服务`, `GitHub`, media, Steam, and final rules only to groups that already exist.
 4. Run remote dependency audit, but default to local rules if GitHub/raw/CDN/converter URLs are unavailable or return HTML/404.
@@ -54,7 +54,7 @@ List these for the user instead of changing them by SSH:
 ## Safe command pattern
 
 ```sh
-TARGET_FILE="/etc/openclash/config/pqjc(2).yaml"
+TARGET_FILE="/etc/openclash/config/config-a(2).yaml"
 sh scripts/openclash_multisub_audit.sh
 sh scripts/openclash_subscription_binding_audit.sh
 TARGET_FILE="$TARGET_FILE" sh scripts/openclash_single_config_template_guard.sh
@@ -63,8 +63,8 @@ sh scripts/openclash_aethersailor_remote_audit.sh
 python3 scripts/openclash_template_apply.py \
   --target "$TARGET_FILE" \
   --template aethersailor-current-safe \
-  --candidate /tmp/pqjc2.aethersailor-current-safe.candidate.yaml
-python3 scripts/openclash_lint_config.py /tmp/pqjc2.aethersailor-current-safe.candidate.yaml
+  --candidate /tmp/config-a2.aethersailor-current-safe.candidate.yaml
+python3 scripts/openclash_lint_config.py /tmp/config-a2.aethersailor-current-safe.candidate.yaml
 ```
 
 Do not apply until the user approves the candidate and rollback path.

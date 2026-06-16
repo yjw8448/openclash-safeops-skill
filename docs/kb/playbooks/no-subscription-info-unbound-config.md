@@ -1,11 +1,11 @@
-# Playbook - `pqjc.yaml` Shows 无订阅信息
+# Playbook - `config-a.yaml` Shows 无订阅信息
 
 ## Goal
 
 Recover OpenClash subscription binding safely when LuCI shows:
 
 ```text
-配置文件: pqjc.yaml
+配置文件: config-a.yaml
 更新时间: <time>
 无订阅信息
 ```
@@ -19,7 +19,7 @@ Do not update subscriptions, do not start one-click config, and do not overwrite
 ### 2. Backup bad state
 
 ```sh
-BAD_DIR="/root/openclash-no-subinfo-pqjc-$(date +%Y%m%d-%H%M%S)"
+BAD_DIR="/root/openclash-no-subinfo-config-a-$(date +%Y%m%d-%H%M%S)"
 mkdir -p "$BAD_DIR"
 cp -a /etc/config/openclash "$BAD_DIR/openclash.uci" 2>/dev/null || true
 cp -a /etc/openclash "$BAD_DIR/openclash-dir" 2>/dev/null || true
@@ -38,13 +38,13 @@ sh scripts/openclash_subscription_binding_audit.sh
 Dry-run first:
 
 ```sh
-sh scripts/openclash_quarantine_unbound_config.sh /etc/openclash/config/pqjc.yaml
+sh scripts/openclash_quarantine_unbound_config.sh /etc/openclash/config/config-a.yaml
 ```
 
 Apply only after user confirms:
 
 ```sh
-sh scripts/openclash_quarantine_unbound_config.sh /etc/openclash/config/pqjc.yaml --apply
+sh scripts/openclash_quarantine_unbound_config.sh /etc/openclash/config/config-a.yaml --apply
 ```
 
 ### 5. Find pre-merge backup

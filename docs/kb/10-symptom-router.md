@@ -18,4 +18,4 @@ Use this table before running repair commands.
 
 ## Config file shows 无订阅信息
 
-Route to `76-unbound-config-decision-tree.md` and `playbooks/no-subscription-info-pqjc.md`. Stop all subscription writes, back up current OpenClash state, audit binding, and restore/rebuild one subscription -> one config mapping only after user confirmation.
+Route to `76-unbound-config-decision-tree.md` and `playbooks/no-subscription-info-unbound-config.md`. Stop all subscription writes, back up current OpenClash state, audit binding, and restore/rebuild one subscription -> one config mapping only after user confirmation.

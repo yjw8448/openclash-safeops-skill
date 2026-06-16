@@ -52,7 +52,7 @@ Skip automatically unless the user explicitly requests and the dependency is ver
 ## Command pattern
 
 ```sh
-TARGET_FILE="/etc/openclash/config/pqjc(2).yaml"
+TARGET_FILE="/etc/openclash/config/config-a(2).yaml"
 sh scripts/openclash_multisub_audit.sh
 sh scripts/openclash_subscription_binding_audit.sh
 TARGET_FILE="$TARGET_FILE" sh scripts/openclash_single_config_template_guard.sh
@@ -60,8 +60,8 @@ TARGET_FILE="$TARGET_FILE" sh scripts/openclash_aethersailor_legacy_audit.sh
 python3 scripts/openclash_template_apply.py \
   --target "$TARGET_FILE" \
   --template aethersailor-legacy-safe \
-  --candidate /tmp/pqjc2.aethersailor-legacy-safe.candidate.yaml
-python3 scripts/openclash_lint_config.py /tmp/pqjc2.aethersailor-legacy-safe.candidate.yaml
+  --candidate /tmp/config-a2.aethersailor-legacy-safe.candidate.yaml
+python3 scripts/openclash_lint_config.py /tmp/config-a2.aethersailor-legacy-safe.candidate.yaml
 ```
 
 Apply only after user approval:
@@ -70,7 +70,7 @@ Apply only after user approval:
 I_UNDERSTAND_TARGETED_WRITE=1 python3 scripts/openclash_template_apply.py \
   --target "$TARGET_FILE" \
   --template aethersailor-legacy-safe \
-  --candidate /tmp/pqjc2.aethersailor-legacy-safe.candidate.yaml \
+  --candidate /tmp/config-a2.aethersailor-legacy-safe.candidate.yaml \
   --apply
 ```
 

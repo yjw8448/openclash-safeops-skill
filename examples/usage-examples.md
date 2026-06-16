@@ -30,18 +30,18 @@ scripts/openclash_diagnose.sh
 scripts/openclash_subscription_health.sh
 ```
 
-## Example 2: `pqjc.yaml` shows no subscription information
+## Example 2: `config-a.yaml` shows no subscription information
 
 User says:
 
 ```text
-OpenClash 页面显示配置文件 pqjc.yaml，更新时间有，但无订阅信息。
+OpenClash 页面显示配置文件 config-a.yaml，更新时间有，但无订阅信息。
 ```
 
 Expected skill behavior:
 
 1. Stop ordinary subscription repair.
-2. Treat `pqjc.yaml` as an unbound YAML.
+2. Treat `config-a.yaml` as an unbound YAML.
 3. Back up and preserve the file.
 4. Audit UCI subscription bindings.
 5. Decide whether the file is local, generated, restored, or accidentally merged.
@@ -52,7 +52,7 @@ Relevant files:
 ```text
 SKILL.md
 docs/kb/76-unbound-config-decision-tree.md
-docs/kb/playbooks/no-subscription-info-pqjc.md
+docs/kb/playbooks/no-subscription-info-unbound-config.md
 scripts/openclash_no_subinfo_audit.sh
 scripts/openclash_subscription_binding_audit.sh
 scripts/openclash_quarantine_unbound_config.sh
@@ -145,13 +145,13 @@ scripts/openclash_multisub_guard.sh
 User says:
 
 ```text
-我想把 pqjc(2).yaml 按 FFAni 的 Redir-Host + SmartDNS 模板改一下，只改这个配置。
+我想把 config-a(2).yaml 按 FFAni 的 Redir-Host + SmartDNS 模板改一下，只改这个配置。
 ```
 
 Expected skill behavior:
 
 1. Enter Template mode, not one-click global configuration.
-2. Confirm the exact target file `/etc/openclash/config/pqjc(2).yaml`.
+2. Confirm the exact target file `/etc/openclash/config/config-a(2).yaml`.
 3. Run multi-subscription and binding audits first.
 4. Run the single-config template guard.
 5. Verify SmartDNS prerequisites before using the FFAni profile.
@@ -176,7 +176,7 @@ scripts/openclash_lint_config.py
 
 User says:
 
-> Use the Aethersailor-Custom_OpenClash_Rules style to generate a candidate config for `/etc/openclash/config/pqjc(2).yaml`. Do not modify other YAML files, do not merge subscriptions, and do not modify network/dhcp/firewall.
+> Use the Aethersailor-Custom_OpenClash_Rules style to generate a candidate config for `/etc/openclash/config/config-a(2).yaml`. Do not modify other YAML files, do not merge subscriptions, and do not modify network/dhcp/firewall.
 
 Expected skill route:
 
@@ -191,7 +191,7 @@ Expected skill route:
 Example commands:
 
 ```sh
-TARGET_FILE="/etc/openclash/config/pqjc(2).yaml"
+TARGET_FILE="/etc/openclash/config/config-a(2).yaml"
 sh scripts/openclash_multisub_audit.sh
 sh scripts/openclash_subscription_binding_audit.sh
 TARGET_FILE="$TARGET_FILE" sh scripts/openclash_single_config_template_guard.sh
@@ -199,15 +199,15 @@ TARGET_FILE="$TARGET_FILE" sh scripts/openclash_aethersailor_legacy_audit.sh
 python3 scripts/openclash_template_apply.py \
   --target "$TARGET_FILE" \
   --template aethersailor-legacy-safe \
-  --candidate /tmp/pqjc2.aethersailor-legacy-safe.candidate.yaml
-python3 scripts/openclash_lint_config.py /tmp/pqjc2.aethersailor-legacy-safe.candidate.yaml
+  --candidate /tmp/config-a2.aethersailor-legacy-safe.candidate.yaml
+python3 scripts/openclash_lint_config.py /tmp/config-a2.aethersailor-legacy-safe.candidate.yaml
 ```
 
 ## Example 8: Generate one config using Aethersailor Current-Safe
 
 User says:
 
-> 按 yjw8448/Aethersailor-Custom_OpenClash_Rules 的最新思路，给 `/etc/openclash/config/pqjc(2).yaml` 生成候选配置。不要覆盖原文件，不要改系统配置，不要合并订阅。
+> 按 yjw8448/Aethersailor-Custom_OpenClash_Rules 的最新思路，给 `/etc/openclash/config/config-a(2).yaml` 生成候选配置。不要覆盖原文件，不要改系统配置，不要合并订阅。
 
 Expected skill behavior:
 
@@ -219,11 +219,11 @@ Expected skill behavior:
 6. Generate candidate only:
 
 ```sh
-TARGET_FILE="/etc/openclash/config/pqjc(2).yaml"
+TARGET_FILE="/etc/openclash/config/config-a(2).yaml"
 python3 scripts/openclash_template_apply.py \
   --target "$TARGET_FILE" \
   --template aethersailor-current-safe \
-  --candidate /tmp/pqjc2.aethersailor-current-safe.candidate.yaml
+  --candidate /tmp/config-a2.aethersailor-current-safe.candidate.yaml
 ```
 
 Relevant files:
@@ -236,3 +236,80 @@ scripts/openclash_aethersailor_remote_audit.sh
 scripts/openclash_template_apply.py
 templates/aethersailor-current-safe-overlay.yaml
 ```
+
+
+## Example 9: Active config switches back to another provider
+
+User says:
+
+```text
+我切换到 config-a(2).yaml 之后，一会儿又自动变回 config-b.yaml。
+```
+
+Expected skill behavior:
+
+1. Stop normal repair and do not rewrite `config_update_url` blindly.
+2. Run `openclash_active_binding_audit.sh`.
+3. Check `config_path`, `config_update_url`, and `auto_update` with redaction.
+4. Ask which provider should be the current auto-update target.
+5. Back up before changing `/etc/config/openclash`.
+6. Do not modify network/dhcp/firewall.
+
+Relevant files:
+
+```text
+scripts/openclash_active_binding_audit.sh
+docs/kb/82-active-config-update-url-binding.md
+references/reporting.md
+```
+
+## Example 10: Fix report is stale or not updating
+
+User says:
+
+```text
+openclash_fix_report.md 老是不更新。
+```
+
+Expected skill behavior:
+
+1. Enter Reporting mode.
+2. Determine whether the report is local or router-side.
+3. Generate both `openclash_fix_report.md` and `openclash_fix_report_YYYYmmdd-HHMMSS.md`.
+4. Redact subscription URLs, passwords, tokens, API keys, Bearer tokens, and dashboard paths.
+5. Print report paths and `Generated At` time.
+
+Relevant files:
+
+```text
+scripts/openclash_report_writer.py
+scripts/openclash_redact.py
+references/reporting.md
+docs/kb/81-report-generation-and-sync.md
+```
+
+## Example 11: Audit reusable local SSH helper scripts
+
+User says:
+
+```text
+WorkBuddy 之前生成过 ssh_connect.py，后面可能还要用，不要删除，只检查有没有泄露密码或订阅链接。
+```
+
+Expected skill behavior:
+
+1. Enter local helper hygiene mode, not cleanup/delete mode.
+2. Locate reusable helper scripts such as `ssh_connect.py` and report their paths.
+3. Do not delete them automatically.
+4. Audit for embedded router passwords, subscription URLs, tokens, API keys, and Bearer tokens.
+5. Redact any findings before displaying output.
+6. Recommend deletion or editing only if the user explicitly asks.
+
+Relevant files:
+
+```text
+docs/kb/83-local-ssh-helper-hygiene.md
+scripts/openclash_redact.py
+references/reporting.md
+```
+

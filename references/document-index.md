@@ -17,7 +17,7 @@ Read only the documents relevant to the user's current symptom.
 | LuCI navigation | `docs/kb/90-luci-navigation-map.md`, `docs/LUCI_CLICK_GUIDE.md` |
 | Emergency restore | `docs/kb/playbooks/emergency-restore.md`, `docs/EMERGENCY_MODE.md` |
 | Restore two subscriptions | `docs/kb/playbooks/restore-two-subscriptions.md` |
-| `pqjc.yaml` shows no subscription info | `docs/kb/playbooks/no-subscription-info-pqjc.md` |
+| `config-a.yaml` shows no subscription info | `docs/kb/playbooks/no-subscription-info-unbound-config.md` |
 | Watchdog usage | `docs/WATCHDOG_USAGE.md`, `docs/V3_ANTI_LOCKOUT.md` |
 | Config linting | `docs/CONFIG_LINT_RULES.md` |
 | Version compatibility | `docs/VERSION_COMPATIBILITY.md` |
@@ -30,3 +30,9 @@ Read only the documents relevant to the user's current symptom.
 | One-click templates / overwrite snippets | `references/templates-reference.md`, `templates/` |
 | Aethersailor Current-Safe single-config generation | `references/aethersailor-current-safe.md`, `references/aethersailor-source-snapshot.md`, `docs/kb/79-aethersailor-current-safe-config-generation.md`, `templates/aethersailor-current-safe-overlay.yaml` |
 | Aethersailor Legacy-Safe single-config generation | `references/aethersailor-legacy-safe.md`, `docs/kb/40-aethersailor-fakeip-profile.md`, `templates/aethersailor-legacy-safe-overlay.yaml` |
+
+## v7.4 reporting and binding consistency
+
+- Stale or missing `openclash_fix_report.md` -> `docs/kb/81-report-generation-and-sync.md`, `references/reporting.md`.
+- Active config switches back after selecting another YAML -> `docs/kb/82-active-config-update-url-binding.md`.
+- Local SSH helper scripts created by WorkBuddy -> `docs/kb/83-local-ssh-helper-hygiene.md`.

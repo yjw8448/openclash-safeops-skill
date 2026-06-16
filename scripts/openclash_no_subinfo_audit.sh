@@ -1,6 +1,6 @@
 #!/bin/sh
 # OpenClash unbound-config / "No subscription information" audit.
-# Read-only by default. Designed for cases like: current profile pqjc.yaml shows 无订阅信息.
+# Read-only by default. Designed for cases like: current profile config-a.yaml shows 无订阅信息.
 # It never prints full subscription URLs.
 
 set -eu

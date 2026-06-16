@@ -38,6 +38,6 @@ This KB is a structured, offline reference layer for WorkBuddy/Skill Creator. It
 
 ## V6 subscription-binding recovery
 
-- `76-unbound-config-decision-tree.md` - Use when LuCI shows a config file such as `pqjc.yaml` with `无订阅信息`.
-- `playbooks/no-subscription-info-pqjc.md` - Step-by-step recovery playbook for unbound YAML/config binding loss.
+- `76-unbound-config-decision-tree.md` - Use when LuCI shows a config file such as `config-a.yaml` with `无订阅信息`.
+- `playbooks/no-subscription-info-unbound-config.md` - Step-by-step recovery playbook for unbound YAML/config binding loss.
 - `checklists/unbound-config-prewrite-checklist.md` - Required checks before writing when a profile is unbound.

@@ -36,7 +36,7 @@
 5. Do not restore network/dhcp/firewall.
 6. Ask which profile should be active before starting OpenClash.
 
-## `pqjc.yaml` or another YAML shows no subscription information
+## `config-a.yaml` or another YAML shows no subscription information
 
 1. Back up the current unbound state.
 2. Audit subscription binding records.

@@ -8,7 +8,7 @@ APPLY=0
 [ "${2:-}" = "--apply" ] && APPLY=1
 
 if [ -z "$CONFIG_FILE" ] || [ ! -f "$CONFIG_FILE" ]; then
-  echo "Usage: sh openclash_quarantine_unbound_config.sh /etc/openclash/config/pqjc.yaml [--apply]"
+  echo "Usage: sh openclash_quarantine_unbound_config.sh /etc/openclash/config/config-a.yaml [--apply]"
   exit 2
 fi
 

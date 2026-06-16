@@ -28,3 +28,14 @@ Template runs should additionally report:
 5. Protected sections preserved, especially `proxies`, `proxy-groups`, and providers.
 6. Diff summary and lint result.
 7. Whether user approval is still required before overwrite.
+
+## v7.4 additions
+
+For every workflow, also include:
+
+- Report latest path: `openclash_fix_report.md` location.
+- Report snapshot path: timestamped report location.
+- Report generated time.
+- Active config / update URL consistency judgment.
+- Confirmation that subscription URLs and passwords were redacted.
+- Local SSH helper handling: retained / audited / user-requested deletion only.

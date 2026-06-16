@@ -1,8 +1,8 @@
 #!/bin/sh
 # Read-only guard for applying a template to exactly one OpenClash YAML config.
 # Usage:
-#   TARGET_FILE=/etc/openclash/config/pqjc\(2\).yaml sh openclash_single_config_template_guard.sh
-#   sh openclash_single_config_template_guard.sh /etc/openclash/config/pqjc\(2\).yaml
+#   TARGET_FILE=/etc/openclash/config/config-a\(2\).yaml sh openclash_single_config_template_guard.sh
+#   sh openclash_single_config_template_guard.sh /etc/openclash/config/config-a\(2\).yaml
 
 set -u
 TARGET_FILE="${TARGET_FILE:-${1:-}}"

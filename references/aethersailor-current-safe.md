@@ -9,7 +9,7 @@ Adapt one existing subscription-managed OpenClash YAML to the current Aethersail
 ## Run pattern
 
 ```sh
-TARGET_FILE="/etc/openclash/config/pqjc(2).yaml"
+TARGET_FILE="/etc/openclash/config/config-a(2).yaml"
 sh scripts/openclash_multisub_audit.sh
 sh scripts/openclash_subscription_binding_audit.sh
 TARGET_FILE="$TARGET_FILE" sh scripts/openclash_single_config_template_guard.sh
@@ -18,9 +18,9 @@ sh scripts/openclash_aethersailor_remote_audit.sh
 python3 scripts/openclash_template_apply.py \
   --target "$TARGET_FILE" \
   --template aethersailor-current-safe \
-  --candidate /tmp/pqjc2.aethersailor-current-safe.candidate.yaml
-python3 scripts/openclash_lint_config.py /tmp/pqjc2.aethersailor-current-safe.candidate.yaml
-python3 scripts/openclash_group_detect.py /tmp/pqjc2.aethersailor-current-safe.candidate.yaml --env
+  --candidate /tmp/config-a2.aethersailor-current-safe.candidate.yaml
+python3 scripts/openclash_lint_config.py /tmp/config-a2.aethersailor-current-safe.candidate.yaml
+python3 scripts/openclash_group_detect.py /tmp/config-a2.aethersailor-current-safe.candidate.yaml --env
 ```
 
 ## Write scope

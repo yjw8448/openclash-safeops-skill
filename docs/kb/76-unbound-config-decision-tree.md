@@ -1,6 +1,6 @@
 # 76 - Unbound Config / 无订阅信息 Decision Tree
 
-Use this when LuCI shows a config file such as `pqjc.yaml` with **无订阅信息**.
+Use this when LuCI shows a config file such as `config-a.yaml` with **无订阅信息**.
 
 ## Symptoms
 

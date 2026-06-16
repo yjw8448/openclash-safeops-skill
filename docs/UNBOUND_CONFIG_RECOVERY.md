@@ -1,6 +1,6 @@
 # Unbound Config / “无订阅信息” Recovery
 
-This document handles the OpenClash LuCI state where a profile, for example `pqjc.yaml`, appears as a config file but shows **无订阅信息**.
+This document handles the OpenClash LuCI state where a profile, for example `config-a.yaml`, appears as a config file but shows **无订阅信息**.
 
 ## Meaning
 
@@ -29,7 +29,7 @@ Do not update, overwrite, merge, delete, or make this YAML the sole active sourc
 ## Never do
 
 - Do not merge two subscriptions into one YAML.
-- Do not treat `pqjc.yaml` as authoritative just because it is selected.
+- Do not treat `config-a.yaml` as authoritative just because it is selected.
 - Do not print full subscription URLs.
 - Do not modify `/etc/config/network`, `/etc/config/dhcp`, or `/etc/config/firewall`.
 - Do not restart network.

@@ -4,9 +4,9 @@
 Default behavior is candidate-only and does not overwrite the target.
 
 Usage:
-  python3 openclash_template_apply.py --target /etc/openclash/config/pqjc.yaml --template aethersailor-current-safe --candidate /tmp/pqjc.aethersailor.yaml
-  python3 openclash_template_apply.py --target /etc/openclash/config/pqjc.yaml --template ffani-redirhost-smartdns --candidate /tmp/pqjc.ffani.yaml
-  I_UNDERSTAND_TARGETED_WRITE=1 python3 openclash_template_apply.py --target /etc/openclash/config/pqjc.yaml --template ffani-redirhost-smartdns --candidate /tmp/pqjc.ffani.yaml --apply
+  python3 openclash_template_apply.py --target /etc/openclash/config/config-a.yaml --template aethersailor-current-safe --candidate /tmp/config-a.aethersailor.yaml
+  python3 openclash_template_apply.py --target /etc/openclash/config/config-a.yaml --template ffani-redirhost-smartdns --candidate /tmp/config-a.ffani.yaml
+  I_UNDERSTAND_TARGETED_WRITE=1 python3 openclash_template_apply.py --target /etc/openclash/config/config-a.yaml --template ffani-redirhost-smartdns --candidate /tmp/config-a.ffani.yaml --apply
   python3 openclash_template_apply.py --target config.yaml --overlay-file templates/custom-overlay.yaml --candidate /tmp/config.candidate.yaml
 
 Safety properties:

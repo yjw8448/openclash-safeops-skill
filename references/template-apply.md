@@ -2,7 +2,7 @@
 
 Use this reference when the user asks to modify the current OpenClash config or a specific YAML config according to a template, for example:
 
-- `把 pqjc(2).yaml 按 FFAni 方案设置`
+- `把 config-a(2).yaml 按 FFAni 方案设置`
 - `把当前配置按照模板改一下`
 - `只改这个配置，不要影响另一个订阅`
 
@@ -29,7 +29,7 @@ Do not perform global one-click setup. Do not merge multiple subscriptions. Do n
 Example:
 
 ```sh
-TARGET_FILE="/etc/openclash/config/pqjc(2).yaml"
+TARGET_FILE="/etc/openclash/config/config-a(2).yaml"
 sh scripts/openclash_multisub_audit.sh
 sh scripts/openclash_subscription_binding_audit.sh
 TARGET_FILE="$TARGET_FILE" sh scripts/openclash_single_config_template_guard.sh
@@ -41,8 +41,8 @@ sh scripts/openclash_backup.sh
 Generate a candidate instead of editing the target directly:
 
 ```sh
-TARGET_FILE="/etc/openclash/config/pqjc(2).yaml"
-CANDIDATE="/tmp/pqjc2.ffani.candidate.yaml"
+TARGET_FILE="/etc/openclash/config/config-a(2).yaml"
+CANDIDATE="/tmp/config-a2.ffani.candidate.yaml"
 python3 scripts/openclash_template_apply.py \
   --target "$TARGET_FILE" \
   --template ffani-redirhost-smartdns \

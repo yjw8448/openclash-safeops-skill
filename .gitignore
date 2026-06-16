@@ -31,9 +31,5 @@ venv/
 *secret*
 *token*
 
-*.pyc
-*.pyo
 *.backup
-*.secret
-*.token
 *.key

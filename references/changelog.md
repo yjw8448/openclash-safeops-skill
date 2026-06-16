@@ -1,5 +1,33 @@
 # Changelog
 
+## v7.6 - Packaging Cleanup and Changelog Order Fix
+
+- Removed accidental `__pycache__/` and Python bytecode from install and GitHub-ready packages.
+- Reordered changelog entries so v7.4 appears between v7.5 and v7.3.
+- Added a usage example for auditing reusable local SSH helper scripts without deleting them.
+- Fixed SKILL.md frontmatter version tag to 7.6 and simplified subtitle.
+- Cleaned redundant .gitignore patterns (covered by *.py[cod], *secret*, *token*).
+- Unified source-map.md version sections under Local Policy Additions.
+- Replaced personal identifiers (pqjc, skylumo, sky, pq) with generic placeholders (config-a, config-b) across all files and renamed playbook no-subscription-info-pqjc → no-subscription-info-unbound-config.
+
+## v7.5 - Redaction Consistency and Lean Reporting Polish
+
+- Fixed report redaction consistency: `openclash_report_writer.py` now uses the same 8-pattern redaction logic as `openclash_redact.py`.
+- Kept `SKILL.md` lean by moving detailed report and binding workflows to references/KB documents.
+- Added v7.4 KB entries to `docs/kb/source-map.md`.
+- Added usage examples for active-config auto-switching and stale report refresh.
+- Added an explicit report placeholder note so agents replace `<fill from ...>` before presenting final reports.
+- Clarified active-binding provider checks as heuristics instead of config-b/config-a-only logic.
+
+## v7.4 - Report and Binding Consistency Edition
+
+- Added `openclash_report_writer.py` to generate both latest and timestamped reports.
+- Added `openclash_redact.py` for consistent URL/password/token redaction.
+- Added `openclash_active_binding_audit.sh` to detect `config_path` / `config_update_url` / `auto_update` mismatches that can cause config auto-switching.
+- Added reporting and binding KB entries.
+- Added local SSH helper hygiene policy: do not delete reusable helper scripts automatically; audit and redact instead.
+- Promoted report generation and binding consistency to high-priority guards in `SKILL.md`.
+
 ## v7.3 - Aethersailor Reference Index Fix and Lean Runtime
 
 - Fixed `SKILL.md` Reference index: `aethersailor-current-safe` now points to `references/aethersailor-current-safe.md`, not the legacy reference.

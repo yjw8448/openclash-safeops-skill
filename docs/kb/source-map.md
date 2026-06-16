@@ -123,7 +123,15 @@ Safety translation:
 - Do not change OpenWrt IPv6 WAN/LAN/DHCP settings from this skill unless user explicitly approves.
 - Use this as an optional profile when Fake-IP causes compatibility problems or SmartDNS already exists.
 
-## v5 local policy additions
+## Local Policy Additions
 
+### v5
 - `docs/MULTI_SUBSCRIPTION_ISOLATION.md` - Local SafeOps policy for preserving user-defined subscription/config boundaries.
 - `docs/kb/75-multi-subscription-decision-tree.md` - Decision tree for multi-subscription audits and accidental merge recovery.
+
+
+### v7.4
+
+- `docs/kb/81-report-generation-and-sync.md` - Report freshness, latest-report plus timestamped snapshot policy, and local/router report sync handling.
+- `docs/kb/82-active-config-update-url-binding.md` - Active `config_path`, `config_update_url`, and `auto_update` consistency checks for cases where selecting one YAML automatically switches back to another provider.
+- `docs/kb/83-local-ssh-helper-hygiene.md` - Local WorkBuddy SSH helper handling policy: audit for embedded secrets, do not delete reusable helper scripts unless the user explicitly asks.
