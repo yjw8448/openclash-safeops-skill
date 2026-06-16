@@ -1,35 +1,21 @@
-# Scripts reference
+# Scripts Reference
 
-| Script | Purpose | Risk / write behavior | Main parameters | Use when | Avoid when |
-|---|---|---|---|---|---|
-| `openclash_active_binding_audit.sh` | Audit `config_path`, `config_update_url`, and `auto_update` consistency to explain auto-switching between configs. | Read-only | `none` | Active config switches back to another provider after manual selection | Do not rewrite `config_update_url` without user choosing the current auto-update target |
-| `openclash_redact.py` | Redact subscription URLs, tokens, passwords, API keys, and secrets from logs/reports. | Read-only text filter | `--file PATH` or stdin/text args | Before displaying UCI/log/report content | Do not use as a substitute for avoiding raw secret collection |
-| `openclash_report_writer.py` | Generate `openclash_fix_report.md` plus timestamped snapshot with redacted fields. | Writes report files only | `--output-dir --report-source --router --target-config --backup-dir --candidate --notes` | End of every diagnosis/repair/template/binding workflow or when report is stale | Does not diagnose router by itself; fill details from workflow evidence |
-| `openclash_aethersailor_legacy_audit.sh` | Audit one target YAML and router DNS/OpenClash state before applying an Aethersailor-style template. | Read-only | `TARGET_FILE` env or first argument | User wants one config adapted to Aethersailor-style Fake-IP/DNS/rules while avoiding stale upstream services | Do not use as permission to modify network/dhcp/firewall or abandoned ad scripts |
-| `openclash_aethersailor_remote_audit.sh` | Probe representative Aethersailor/yjw8448 GitHub/raw/CDN rule URLs and flag unsafe HTML/404/timeouts. | Read-only network checks | `TIMEOUT` env optional | Before writing any remote rule-provider or relying on subscription-conversion/CDN URLs | Do not treat success as permission to merge subscriptions or publish subscription URLs |
-| `openclash_backup.sh` | Create timestamped backup of OpenClash and key configs. | Write backup only | `none` | Before any write | Do not treat backup of network/dhcp/firewall as permission to edit them |
-| `openclash_config_fingerprint.py` | Fingerprint YAML sections and likely ownership. | Read-only | `config paths` | Before restoring or comparing configs | None |
-| `openclash_delayed_rollback.sh` | Schedule a delayed rollback after a medium-risk OpenClash change. | Write `/tmp` rollback launcher; may later restore OpenClash backup | `BACKUP_DIR [seconds]` | Before risky OpenClash writes when watchdog is unavailable or as extra protection | Do not use without a verified backup; cancel PID only after verification |
-| `openclash_diagnose.sh` | Read-only diagnosis of system, OpenClash, DNS, ports, logs. | Read-only | `none` | Start of every SSH workflow | None; mask secrets |
-| `openclash_dns_audit.sh` | Audit DNS services and port conflicts. | Read-only | `none` | DNS failures or OpenClash start breaks browsing | None |
-| `openclash_emergency_restore.sh` | Stop OpenClash, kill orphaned cores, restart dnsmasq/uhttpd, verify. | Write/service action | `--apply` | SSH works but OpenClash broke internet/DNS/LuCI | Do not use as normal config repair |
-| `openclash_group_detect.py` | Detect strategy-group names and suggest role mappings such as AI, Proxy, Auto, Final, Direct. | Read-only; requires Python and PyYAML | `CONFIG [--env]` | Before generating rules or replacing group names | Do not assume `AI`/`Proxy` exist without running this or equivalent audit |
-| `openclash_kb_lookup.sh` | Search the local `docs/kb/` knowledge base by keyword. | Read-only | `keyword` | When choosing a playbook or decision tree | Do not use as a substitute for live router diagnosis |
-| `openclash_lint_config.py` | Deep-lint OpenClash/Mihomo YAML for parse errors, section order, missing groups, and rule target problems. | Read-only; requires Python and PyYAML | `CONFIG [--strict] [--json]` | Before starting OpenClash or after subscription conversion | Do not modify config based on warnings until backup and mapping are clear |
-| `openclash_multisub_audit.sh` | Detect multiple subscriptions/config files. | Read-only | `none` | Before any subscription/config write | None |
-| `openclash_multisub_guard.sh` | Block unsafe writes when mapping is unclear. | Guard/write blocker | `BINDING_REQUIRED, TARGET_FILE` | Before one-click/apply writes | Do not bypass when multiple subscriptions exist |
-| `openclash_no_subinfo_audit.sh` | Detect unbound configs such as LuCI no-subscription-info YAML. | Read-only | `none` | When LuCI shows 无订阅信息 | None |
-| `openclash_oneclick_config.sh` | Generate/apply baseline OpenClash profile. | Dry-run by default; write with --apply | `PROFILE, SUB_URL, --apply` | New setup or controlled reconfiguration; read `references/templates-reference.md` and `templates/` first | Do not run when multi-sub mapping is unclear |
-| `openclash_quarantine_unbound_config.sh` | Copy unbound config to quarantine before recovery. | Write backup/quarantine only | `CONFIG [--apply]` | Before modifying/removing unbound config | Do not delete original unless user confirms |
-| `openclash_restore_multiconfig.sh` | Restore multiple config mapping from confirmed backup. | Write | `BACKUP_DIR [--apply]` | After accidental merge | Do not restore network/dhcp/firewall |
-| `openclash_rollback.sh` | Restore OpenClash files from a backup created by `openclash_backup.sh`. | Write restore; OpenClash scope by default | `BACKUP_DIR [--include-network]` | After a failed repair or accidental merge | Do not use `--include-network` without explicit high-risk approval |
-| `openclash_rule_generator.sh` | Generate safe custom rules for LAN direct, AI, developer services, streaming, CN direct, and fallback. | Write to stdout only | env: `AI_GROUP`, `DEV_GROUP`, `STREAM_GROUP`, `DEFAULT_GROUP` | After detecting real strategy group names | Do not apply generated rules until group names and config ownership are verified |
-| `openclash_rule_test.sh` | Run static and live sanity checks for selected domains, DNS, proxy endpoint, and Dashboard API. | Read-only network/API checks | env: `CONFIG`, `PROXY`, `OC_API`, `OC_SECRET`, `DOMAINS` | After rule changes or when rule routing seems wrong | Do not expose dashboard secret in logs; mask output when needed |
-| `openclash_safe_repair.sh` | Perform low-risk repair: stop OpenClash, kill orphaned cores, restart dnsmasq/uhttpd if needed, verify connectivity. | Dry-run by default; writes/service actions with `--apply` | `[--apply] [--start-openclash]` | SSH works and OpenClash appears to break DNS/internet | Do not use for multi-subscription binding repair or router-wide network changes |
-| `openclash_subscription_binding_audit.sh` | Map UCI subscription records to YAML files. | Read-only | `none` | Binding recovery | Do not print full subscription URLs |
-| `openclash_subscription_health.sh` | Check subscription URL reachability and format. | Read-only by default | `SUB_URL env optional` | Subscription update failure | Do not print full URL |
-| `openclash_validate_config.sh` | Validate one YAML config and check rule targets against existing strategy groups. | Read-only; requires Python3 and PyYAML | `CONFIG` | Quick validation before starting OpenClash | Do not treat missing Python/YAML module as config failure |
-| `openclash_verify_connectivity.sh` | Verify DNS, routes, HTTP, services. | Read-only | `none` | After repair | None |
-| `openclash_watchdog.sh` | Start/disarm rollback guard. | Write/service action | `--start BACKUP --timeout N, --disarm` | Before medium-risk writes | Do not disarm before verification |
-| `openclash_single_config_template_guard.sh` | Confirm that exactly one explicit target YAML is being modified and print binding/config hints. | Read-only | `TARGET_FILE` env or first argument | Before applying any template to an existing config such as `config-a(2).yaml` | Do not continue if target is missing, outside `/etc/openclash/config/`, or mapping is unclear |
-| `openclash_template_apply.py` | Apply a safe built-in or overlay template to one target YAML by generating a candidate first. Preserves proxies, proxy-groups, and providers. | Candidate-only by default; writes target only with `--apply` and `I_UNDERSTAND_TARGETED_WRITE=1` | `--target CONFIG --template {aethersailor-current-safe|aethersailor-legacy-safe|ffani-redirhost-smartdns|minimal-safe|ai-dev-rules} --candidate FILE [--apply] [--overlay-file FILE] [--ai-group NAME] [--proxy-group NAME]` | When the user wants one current config modified according to a profile/template | Do not use for global one-click setup, multi-config merge, or when PyYAML is unavailable and no equivalent validation exists |
+Read-only scripts: diagnose, dns_audit, subscription_health, multisub_audit, binding audits, rule_test, config_fingerprint.
+
+Write-capable scripts require explicit `--apply` plus `I_UNDERSTAND_SAFEOPS_WRITE=1` or `I_UNDERSTAND_TARGETED_WRITE=1`.
+
+## Shared library
+
+`scripts/lib_safeops.sh` — POSIX sh function library sourced by other scripts. Provides:
+
+- `redact_stream()` — pipe-through redaction for command output
+- `print_header()` — consistent section formatting
+- `is_openclash_path()` — path safety validation
+- `require_target_file()` — enforce single-target mode
+- `list_yaml_files()` — discover OpenClash config YAML/yml files
+- `uci_get_safe()` — read-only UCI access
+- `service_status_safe()` — read-only service status
+- `require_apply_flag()` — enforce `--apply` + `I_UNDERSTAND_SAFEOPS_WRITE=1` gate
+- `make_backup_dir()` — create timestamped backup directory
+- `say()`, `warn()`, `fail()` — consistent output helpers
+- `have()` — portable command existence check

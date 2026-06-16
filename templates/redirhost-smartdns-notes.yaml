@@ -1,16 +1,6 @@
-# Redir-Host + SmartDNS notes for OpenClash SafeOps.
-# This file is documentation-like; do not import blindly.
-
-profile: redirhost-smartdns
-mode: Redir-Host compatibility
-risk: medium-to-high if SmartDNS or IPv6 OpenWrt settings are changed
-checks:
-  - Ensure only one deliberate DNS chain is active.
-  - Avoid multiple DNS hijackers on port 53.
-  - Confirm SmartDNS listens on expected local ports such as 6053/6553 before pointing OpenClash at them.
-  - Confirm WAN IPv6-PD and LAN RA/DHCPv6 before enabling IPv6 proxy/DNS features.
-verification:
-  - nslookup openwrt.org 127.0.0.1
-  - nslookup baidu.com 127.0.0.1
-  - nslookup github.com 127.0.0.1
-  - DNS leak browser tests after client-side proxy/cache is cleared
+# Manual checklist only. Do not auto-apply these system-level items.
+manual_checks:
+  - Confirm SmartDNS is installed and healthy.
+  - Confirm only one service owns upstream DNS for dnsmasq.
+  - Confirm OpenClash DNS listening port does not conflict with SmartDNS.
+  - Do not edit /etc/config/dhcp, /etc/config/network, or /etc/config/firewall from SafeOps.

@@ -1,29 +1,12 @@
 #!/bin/sh
-# Schedule a delayed OpenClash rollback before medium-risk changes.
-# Usage: sh openclash_delayed_rollback.sh /root/openclash-safeops-backup-YYYYmmdd-HHMMSS 180
-# Cancel manually by killing the printed PID if verification succeeds.
-
-set -eu
-BACKUP_DIR="${1:-}"
-DELAY="${2:-180}"
-if [ -z "$BACKUP_DIR" ] || [ ! -d "$BACKUP_DIR" ]; then
-  echo "Usage: sh openclash_delayed_rollback.sh /root/openclash-safeops-backup-YYYYmmdd-HHMMSS [seconds]"
-  exit 1
-fi
-
-ROLLBACK_SCRIPT="/tmp/openclash_delayed_rollback_$$.sh"
-cat > "$ROLLBACK_SCRIPT" <<EOS
-#!/bin/sh
-sleep "$DELAY"
-echo "SafeOps delayed rollback triggered at \$(date)" >> /tmp/openclash-safeops-delayed-rollback.log
-if [ -f /tmp/openclash_rollback.sh ]; then
-  sh /tmp/openclash_rollback.sh "$BACKUP_DIR" >> /tmp/openclash-safeops-delayed-rollback.log 2>&1
-else
-  echo "rollback script missing" >> /tmp/openclash-safeops-delayed-rollback.log
-fi
-EOS
-chmod +x "$ROLLBACK_SCRIPT"
-nohup sh "$ROLLBACK_SCRIPT" >/tmp/openclash-safeops-delayed-rollback.nohup 2>&1 &
-PID=$!
-echo "DELAYED_ROLLBACK_PID=$PID"
-echo "Cancel after verification succeeds: kill $PID"
+set -u
+SCRIPT_DIR=$(CDPATH= cd -- "$(dirname -- "$0")" && pwd)
+. "$SCRIPT_DIR/lib_safeops.sh"
+print_header "delayed rollback scheduler"
+backup="${1:-}"
+seconds="${2:-120}"
+[ -n "$backup" ] || fail "Usage: I_UNDERSTAND_SAFEOPS_WRITE=1 $0 BACKUP_DIR [seconds] --apply"
+[ "${3:-}" = "--apply" ] || { say "Dry run. Would rollback $backup after $seconds seconds."; exit 0; }
+require_apply_flag
+( sleep "$seconds"; I_UNDERSTAND_SAFEOPS_WRITE=1 sh "$SCRIPT_DIR/openclash_rollback.sh" "$backup" --apply ) >/tmp/openclash-safeops-delayed-rollback.log 2>&1 &
+say "Delayed rollback scheduled in background. Cancel manually if verification succeeds. Log: /tmp/openclash-safeops-delayed-rollback.log"

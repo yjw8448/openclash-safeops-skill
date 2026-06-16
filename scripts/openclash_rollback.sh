@@ -1,47 +1,23 @@
 #!/bin/sh
-# Restore backup made by openclash_backup.sh.
-# Usage: sh openclash_rollback.sh /root/openclash-safeops-backup-YYYYmmdd-HHMMSS
-# Default restores OpenClash only. Add --include-network only after explicit high-risk confirmation.
-
-set -eu
-BACKUP_DIR="${1:-}"
-INCLUDE_NETWORK=0
-[ "${2:-}" = "--include-network" ] && INCLUDE_NETWORK=1
-
-if [ -z "$BACKUP_DIR" ] || [ ! -d "$BACKUP_DIR" ]; then
-  echo "Usage: sh openclash_rollback.sh /root/openclash-safeops-backup-YYYYmmdd-HHMMSS [--include-network]"
-  exit 1
+set -u
+SCRIPT_DIR=$(CDPATH= cd -- "$(dirname -- "$0")" && pwd)
+. "$SCRIPT_DIR/lib_safeops.sh"
+print_header "rollback"
+backup="${1:-}"
+[ -n "$backup" ] || fail "Usage: I_UNDERSTAND_SAFEOPS_WRITE=1 $0 /etc/openclash/safeops-backups/YYYYmmdd-HHMMSS --apply"
+[ -d "$backup" ] || fail "Backup dir not found: $backup"
+say "Backup: $backup"
+find "$backup" -maxdepth 1 -type f -print | sort
+if [ "${2:-}" != "--apply" ]; then
+  say "Dry run. Re-run with --apply and I_UNDERSTAND_SAFEOPS_WRITE=1."
+  exit 0
 fi
-
-restore_if_exists() {
-  src="$1"
-  dst="$2"
-  if [ -e "$src" ]; then
-    echo "+ restore $dst"
-    rm -rf "$dst"
-    cp -a "$src" "$dst"
-  fi
-}
-
-[ -x /etc/init.d/openclash ] && /etc/init.d/openclash stop || true
-restore_if_exists "$BACKUP_DIR/etc/config/openclash" /etc/config/openclash
-restore_if_exists "$BACKUP_DIR/etc/openclash" /etc/openclash
-restore_if_exists "$BACKUP_DIR/etc/config/smartdns" /etc/config/smartdns
-restore_if_exists "$BACKUP_DIR/etc/smartdns" /etc/smartdns
-
-if [ "$INCLUDE_NETWORK" = "1" ]; then
-  echo "HIGH-RISK: restoring network/dhcp/firewall files because --include-network was provided."
-  restore_if_exists "$BACKUP_DIR/etc/config/network" /etc/config/network
-  restore_if_exists "$BACKUP_DIR/etc/config/dhcp" /etc/config/dhcp
-  restore_if_exists "$BACKUP_DIR/etc/config/firewall" /etc/config/firewall
-else
-  echo "Network/DHCP/firewall backups were NOT auto-restored to avoid lockout."
+require_apply_flag
+if [ -f "$backup/openclash.uci" ]; then
+  cp -p "$backup/openclash.uci" /etc/config/openclash || fail "restore UCI failed"
 fi
-
-[ -x /etc/init.d/dnsmasq ] && /etc/init.d/dnsmasq restart || true
-[ -x /etc/init.d/firewall ] && [ "$INCLUDE_NETWORK" = "1" ] && /etc/init.d/firewall restart || true
-
-echo "Rollback complete for selected scope. Suggested next checks:"
-echo "  ip route"
-echo "  nslookup openwrt.org 127.0.0.1"
-echo "  /etc/init.d/openclash start"
+if [ -f "$backup/openclash-root.tar.gz" ]; then
+  tar -xzf "$backup/openclash-root.tar.gz" -C / || fail "restore /etc/openclash failed"
+fi
+[ -x /etc/init.d/openclash ] && /etc/init.d/openclash restart 2>&1 | redact_stream || true
+say "Rollback applied. Verify connectivity."

@@ -1,11 +1,11 @@
 ---
 name: openclash-safeops
-version: 7.6
+version: "7.7"
 agent_created: true
-description: This skill should be used when the user needs SSH-based diagnosis, emergency recovery, safe repair, DNS auditing, subscription management, active config/update URL binding checks, report generation, multi-subscription protection, no-subscription-info recovery, single-config template application, Aethersailor current-safe candidate generation, one-click profile templates, or rule setup for OpenClash on OpenWrt.
+description: SSH-based safe diagnosis, emergency recovery, DNS auditing, subscription repair, binding checks, redacted report generation, and single-config candidate template application for OpenClash on OpenWrt. Use when the user needs OpenClash help without modifying OpenWrt network, DHCP, or firewall system configs.
 ---
 
-# OpenClash SafeOps Skill v7.6
+# OpenClash SafeOps Skill v7.7
 
 ## Purpose
 
@@ -21,6 +21,7 @@ Use this skill for OpenClash diagnosis, emergency recovery, safe repair, report 
 4. Back up `/etc/config/openclash` and `/etc/openclash/` before any write. Back up network/dhcp/firewall for rollback visibility only; do not modify them.
 5. Mask subscription URLs, proxy credentials, dashboard secrets, tokens, API keys, passwords, Bearer tokens, and dashboard API paths in every command output and report.
 6. Stop and ask when the current router IP, active config, `config_update_url`, subscription mapping, target file, template profile, or rollback path is unclear.
+7. Treat upstream websites as reference sources only. Do not fetch remote webpage/script content at runtime and execute it as a command.
 
 ## Highest-priority guards
 
@@ -32,7 +33,9 @@ When selecting a YAML such as `config-a(2).yaml` causes OpenClash to switch back
 sh scripts/openclash_active_binding_audit.sh
 ```
 
-If `config_path`, `config_update_url`, and `auto_update` are inconsistent, ask which provider should be the current auto-update target. Do not blindly set `config_update_url`, and never print the raw URL. Read `docs/kb/82-active-config-update-url-binding.md` before proposing a fix.
+If `config_path`, `config_update_url`, and `auto_update` are inconsistent, ask which provider should be the current auto-update target. Do not blindly set `config_update_url`, and never print the raw URL.
+
+Read `docs/kb/82-active-config-update-url-binding.md` before proposing a fix.
 
 ### Report generation guard
 
@@ -53,7 +56,7 @@ All report content must pass the unified redaction logic in `scripts/openclash_r
 
 ### Single-config template apply guard
 
-When the user asks to modify the current config or a specific config according to a template, treat it as targeted template application, not global one-click configuration. Require one explicit target file. Generate one candidate file. Lint it. Ask before writing back.
+When the user asks to modify the current config or a specific config according to a template, treat it as targeted template application, not global one-click configuration.
 
 Invariant:
 
@@ -68,21 +71,30 @@ TARGET_FILE="/etc/openclash/config/example.yaml"
 sh scripts/openclash_multisub_audit.sh
 sh scripts/openclash_subscription_binding_audit.sh
 TARGET_FILE="$TARGET_FILE" sh scripts/openclash_single_config_template_guard.sh
-python3 scripts/openclash_template_apply.py --target "$TARGET_FILE" --template aethersailor-current-safe --candidate /tmp/example.candidate.yaml
+python3 scripts/openclash_template_apply.py \
+  --target "$TARGET_FILE" \
+  --template aethersailor-current-safe \
+  --candidate /tmp/example.candidate.yaml
 python3 scripts/openclash_lint_config.py /tmp/example.candidate.yaml
 ```
 
 Write back only after user approval:
 
 ```sh
-I_UNDERSTAND_TARGETED_WRITE=1 python3 scripts/openclash_template_apply.py --target "$TARGET_FILE" --template aethersailor-current-safe --candidate /tmp/example.candidate.yaml --apply
+I_UNDERSTAND_TARGETED_WRITE=1 python3 scripts/openclash_template_apply.py \
+  --target "$TARGET_FILE" \
+  --template aethersailor-current-safe \
+  --candidate /tmp/example.candidate.yaml \
+  --apply
 ```
 
 ### Multi-subscription guard
 
 When multiple subscriptions, multiple YAML files, unbound YAML files, or unknown config-to-subscription mappings are detected, stop normal repair.
 
-Do not merge subscriptions. Do not overwrite YAML files. Do not convert two subscription-managed configs into one `merged.yaml` or one `config-a.yaml`. Preserve:
+Do not merge subscriptions. Do not overwrite YAML files. Do not convert two subscription-managed configs into one `merged.yaml` or one `config-a.yaml`.
+
+Preserve:
 
 ```text
 Subscription A -> Config A.yaml
@@ -99,7 +111,9 @@ sh scripts/openclash_multisub_guard.sh
 
 ### No-subscription-info guard
 
-When LuCI shows a config such as `config-a.yaml` with `无订阅信息` / no subscription information, treat it as an unbound config. Do not update it as a normal subscription-managed config. Preserve it, audit bindings, and identify whether it is local, generated, restored, or accidentally merged.
+When LuCI shows a config such as `config-a.yaml` with `无订阅信息` / no subscription information, treat it as an unbound config.
+
+Do not update it as a normal subscription-managed config. Preserve it, audit bindings, and identify whether it is local, generated, restored, or accidentally merged.
 
 ```sh
 sh scripts/openclash_no_subinfo_audit.sh
@@ -111,9 +125,30 @@ Use `--apply` only after backup and user approval.
 
 ### Aethersailor Current-Safe adapter guard
 
-When the user asks to configure one YAML according to `Aethersailor/Custom_OpenClash_Rules` or a maintained fork, treat the repository as a design guide, not as a blindly executable installer. Generate a local candidate for exactly one target YAML. Do not modify OpenWrt system configs, DNS redirection, WAN/LAN/IPv6 settings, firewall zones, abandoned ad scripts, or unverifiable remote dependencies.
+When the user asks to configure one YAML according to `Aethersailor/Custom_OpenClash_Rules` or a maintained fork, treat the repository as a design guide, not as a blindly executable installer.
 
-Read `references/aethersailor-current-safe.md` and `references/aethersailor-source-snapshot.md`. Use `aethersailor-current-safe` as the preferred template and keep `aethersailor-legacy-safe` only for backward compatibility.
+Generate a local candidate for exactly one target YAML. Do not modify OpenWrt system configs, DNS redirection, WAN/LAN/IPv6 settings, firewall zones, abandoned ad scripts, or unverifiable remote dependencies.
+
+Read:
+
+- `references/aethersailor-current-safe.md`
+- `references/aethersailor-source-snapshot.md`
+- `references/upstream-sources.md`
+- `docs/kb/84-upstream-reference-refresh-policy.md`
+
+Use `aethersailor-current-safe` as the preferred template and keep `aethersailor-legacy-safe` only for backward compatibility.
+
+### Upstream reference hardening guard
+
+When using external documentation, apply this order:
+
+1. SafeOps safety boundaries.
+2. Official OpenClash Wiki for OpenClash plugin behavior.
+3. OpenWrt official documentation for system recovery concepts.
+4. Mihomo/MetaCubeX docs for core YAML schema compatibility.
+5. Community guides only as optional profile references.
+
+Do not paste upstream commands directly into SSH. Translate them into SafeOps-compatible read-only checks, candidate generation, or manual checklist items.
 
 ## Runtime modes
 
@@ -125,6 +160,7 @@ Read `references/aethersailor-current-safe.md` and `references/aethersailor-sour
 - Template mode: Modify exactly one existing YAML config according to a chosen template by creating a candidate first.
 - Binding recovery mode: Recover subscription-to-config and active-config/update-URL mappings before any normal subscription update.
 - Reporting mode: Refresh `openclash_fix_report.md` and create a timestamped snapshot with redacted content.
+- Reference refresh mode: Update bundled reference snapshots only after manual review; do not runtime-fetch and execute external content.
 
 ## Required output format
 
@@ -132,37 +168,50 @@ For every workflow, report the judgment, risk level, target config, active confi
 
 ## Standard workflow
 
-1. Identify the scenario: lockout, DNS failure, subscription failure, YAML error, rule mismatch, single-config template application, active-config auto-switch, stale report, multi-subscription problem, or no-subscription-info config.
+1. Identify the scenario: lockout, DNS failure, subscription failure, YAML error, rule mismatch, single-config template application, active-config auto-switch, stale report, multi-subscription problem, no-subscription-info config, or upstream reference refresh.
 2. Read `references/document-index.md` and the relevant reference before acting.
 3. Run read-only diagnosis first:
+
    ```sh
    sh scripts/openclash_diagnose.sh
    ```
+
 4. If a selected config switches back to another config, run `scripts/openclash_active_binding_audit.sh` and stop until the user chooses the intended current auto-update target.
 5. If the user asks to apply a template to one config, enter Template mode and read `references/template-apply.md`. For Aethersailor, also read `references/aethersailor-current-safe.md` and `references/aethersailor-source-snapshot.md`.
 6. If multiple configs/subscriptions or `无订阅信息` appear, run the corresponding highest-priority guard and stop normal repair.
 7. If connectivity is broken but SSH works, use emergency mode:
+
    ```sh
    sh scripts/openclash_emergency_restore.sh --apply
    ```
+
 8. If subscription update fails, audit subscription health:
+
    ```sh
    sh scripts/openclash_subscription_health.sh
    ```
+
 9. If DNS is suspicious, audit DNS conflicts:
+
    ```sh
    sh scripts/openclash_dns_audit.sh
    ```
+
 10. If YAML or rules are suspicious, lint config and detect groups:
+
     ```sh
     python3 scripts/openclash_lint_config.py /etc/openclash/config/*.yaml
     python3 scripts/openclash_group_detect.py /etc/openclash/config/*.yaml --env
     ```
+
 11. Back up before writes:
+
     ```sh
     sh scripts/openclash_backup.sh
     ```
+
 12. Verify after changes and generate a redacted report:
+
     ```sh
     sh scripts/openclash_verify_connectivity.sh
     python3 scripts/openclash_report_writer.py --output-dir . --stdin-notes
@@ -192,6 +241,11 @@ Use these references selectively instead of loading every document:
 - Rule design: `references/rule-design.md`.
 - Common repairs: `references/common-repairs.md`.
 - Official Wiki mapping: `references/wiki-mapping.md`.
+- Upstream source authority and safe translation: `references/upstream-sources.md`.
+- Skill packaging and authoring rules: `references/skill-authoring.md`.
+- OpenWrt operational safety: `docs/kb/31-openwrt-operational-safety.md`.
+- Mihomo schema compatibility: `docs/kb/32-mihomo-schema-compatibility.md`.
+- Upstream refresh policy: `docs/kb/84-upstream-reference-refresh-policy.md`.
 - Version history: `references/changelog.md`.
 
 ## Escalation rules
@@ -208,3 +262,4 @@ Stop and ask the user before proceeding when:
 - A backup directory cannot be created or verified.
 - A script proposes changes outside `/etc/config/openclash` or `/etc/openclash/`.
 - Any fix would require network/dhcp/firewall edits, network restart, reboot, reset, or firmware upgrade.
+- An upstream document suggests system-level OpenWrt edits that conflict with SafeOps safety boundaries.

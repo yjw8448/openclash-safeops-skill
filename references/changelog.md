@@ -1,14 +1,28 @@
 # Changelog
 
+## v7.7 - Reference Hardening and Skill Packaging Edition
+
+- Fixed `SKILL.md` frontmatter into valid multi-line YAML so agent skill loaders can parse metadata reliably.
+- Re-formatted `SKILL.md`, `README.md`, `.gitignore`, `references/changelog.md`, and `docs/kb/source-map.md` from compressed long lines into maintainable Markdown.
+- Added upstream reference hardening policy: upstream websites are reference sources only, not runtime-executed instructions.
+- Added `references/upstream-sources.md` to classify official and community sources by authority level, safe use, and SafeOps translation.
+- Added `references/skill-authoring.md` to document Skill packaging, frontmatter, progressive disclosure, and repository hygiene.
+- Added `docs/kb/31-openwrt-operational-safety.md` for OpenWrt-layer safety, failsafe boundary, SSH/LuCI recovery limits, and system-config no-touch policy.
+- Added `docs/kb/32-mihomo-schema-compatibility.md` for Mihomo/OpenClash YAML schema compatibility and version-sensitive DNS field handling.
+- Added `docs/kb/84-upstream-reference-refresh-policy.md` for safe upstream documentation refresh.
+- Added GitHub Actions CI for bytecode regression checks, Skill frontmatter validation, Python compile checks, and YAML linting.
+- Added `.editorconfig`, `.prettierrc`, `.yamllint`, and `tools/check_skill_frontmatter.py`.
+- Kept all v7.x safety invariants: no normal network/dhcp/firewall edits, no `network restart`, no reboot/reset, no multi-subscription merge, candidate-before-apply, report redaction, and user approval before write.
+
 ## v7.6 - Packaging Cleanup and Changelog Order Fix
 
 - Removed accidental `__pycache__/` and Python bytecode from install and GitHub-ready packages.
 - Reordered changelog entries so v7.4 appears between v7.5 and v7.3.
 - Added a usage example for auditing reusable local SSH helper scripts without deleting them.
 - Fixed SKILL.md frontmatter version tag to 7.6 and simplified subtitle.
-- Cleaned redundant .gitignore patterns (covered by *.py[cod], *secret*, *token*).
+- Cleaned redundant .gitignore patterns covered by `*.py[cod]`, `*secret*`, and `*token*`.
 - Unified source-map.md version sections under Local Policy Additions.
-- Replaced personal identifiers (pqjc, skylumo, sky, pq) with generic placeholders (config-a, config-b) across all files and renamed playbook no-subscription-info-pqjc → no-subscription-info-unbound-config.
+- Replaced personal identifiers with generic placeholders across files and renamed playbook `no-subscription-info-pqjc` to `no-subscription-info-unbound-config`.
 
 ## v7.5 - Redaction Consistency and Lean Reporting Polish
 
@@ -16,8 +30,8 @@
 - Kept `SKILL.md` lean by moving detailed report and binding workflows to references/KB documents.
 - Added v7.4 KB entries to `docs/kb/source-map.md`.
 - Added usage examples for active-config auto-switching and stale report refresh.
-- Added an explicit report placeholder note so agents replace `<fill from ...>` before presenting final reports.
-- Clarified active-binding provider checks as heuristics instead of config-b/config-a-only logic.
+- Added an explicit report placeholder note so agents replace placeholders before presenting final reports.
+- Clarified active-binding provider checks as heuristics instead of provider-specific logic.
 
 ## v7.4 - Report and Binding Consistency Edition
 

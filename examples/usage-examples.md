@@ -1,315 +1,63 @@
-# Usage examples
+# Usage Examples
 
-Use these examples to invoke OpenClash SafeOps v7 in WorkBuddy or another agent. Keep the user's real subscription URLs, router password, tokens, and dashboard secrets out of visible logs.
-
-## Example 1: Subscription update failure
-
-User says:
-
-```text
-我的 OpenClash 更新订阅失败了，SSH 可以进路由器。
-```
-
-Expected skill behavior:
-
-1. Run read-only diagnosis first.
-2. Check whether multiple subscriptions or unbound configs exist.
-3. Audit subscription health.
-4. Audit DNS only if subscription fetch depends on DNS.
-5. Back up before changing OpenClash settings.
-6. Never edit network/dhcp/firewall.
-
-Relevant files:
-
-```text
-SKILL.md
-references/document-index.md
-references/scripts-reference.md
-docs/kb/70-subscription-decision-tree.md
-scripts/openclash_diagnose.sh
-scripts/openclash_subscription_health.sh
-```
-
-## Example 2: `config-a.yaml` shows no subscription information
-
-User says:
-
-```text
-OpenClash 页面显示配置文件 config-a.yaml，更新时间有，但无订阅信息。
-```
-
-Expected skill behavior:
-
-1. Stop ordinary subscription repair.
-2. Treat `config-a.yaml` as an unbound YAML.
-3. Back up and preserve the file.
-4. Audit UCI subscription bindings.
-5. Decide whether the file is local, generated, restored, or accidentally merged.
-6. Ask before quarantine or restore.
-
-Relevant files:
-
-```text
-SKILL.md
-docs/kb/76-unbound-config-decision-tree.md
-docs/kb/playbooks/no-subscription-info-unbound-config.md
-scripts/openclash_no_subinfo_audit.sh
-scripts/openclash_subscription_binding_audit.sh
-scripts/openclash_quarantine_unbound_config.sh
-```
-
-## Example 3: Two subscriptions were merged into one config
-
-User says:
-
-```text
-我原来是两个订阅对应两个配置，修复后变成一个配置了。
-```
-
-Expected skill behavior:
-
-1. Stop normal repair immediately.
-2. Back up the current bad merged state.
-3. Search SafeOps/OpenClash backups.
-4. Fingerprint YAML files.
-5. Restore only `/etc/config/openclash` and `/etc/openclash/` from a confirmed backup.
-6. Do not restore or edit network/dhcp/firewall.
-
-Relevant files:
-
-```text
-SKILL.md
-docs/kb/75-multi-subscription-decision-tree.md
-docs/kb/playbooks/restore-two-subscriptions.md
-scripts/openclash_multisub_audit.sh
-scripts/openclash_config_fingerprint.py
-scripts/openclash_restore_multiconfig.sh
-```
-
-## Example 4: OpenClash enabled and internet broke, but SSH works
-
-User says:
-
-```text
-OpenClash 一开就断网，但是 SSH 还能进。
-```
-
-Expected skill behavior:
-
-1. Run emergency mode, not normal one-click config.
-2. Stop OpenClash and orphaned cores.
-3. Restart dnsmasq/uhttpd only.
-4. Verify router DNS and external connectivity.
-5. Leave OpenClash stopped until diagnosis is complete.
-
-Relevant files:
-
-```text
-SKILL.md
-docs/kb/playbooks/emergency-restore.md
-scripts/openclash_emergency_restore.sh
-scripts/openclash_verify_connectivity.sh
-```
-
-## Example 5: Generate a safe one-click profile
-
-User says:
-
-```text
-帮我生成一个 OpenClash 的安全一键配置模板，不要直接改路由器。
-```
-
-Expected skill behavior:
-
-1. Use Configure mode.
-2. Default to dry-run.
-3. Use the templates directory and `references/templates-reference.md`.
-4. Detect real strategy-group names before writing rules.
-5. Apply only after backup and multi-subscription guard passes.
-
-Relevant files:
-
-```text
-references/templates-reference.md
-references/profiles.md
-templates/oneclick-profile.env.example
-templates/overwrite-safe-basic.yaml
-templates/overwrite-ai-dev.yaml
-templates/rules-ai-classical.yaml
-scripts/openclash_oneclick_config.sh
-scripts/openclash_multisub_guard.sh
-```
-
-## Example 6: Apply a template to one current config
-
-User says:
-
-```text
-我想把 config-a(2).yaml 按 FFAni 的 Redir-Host + SmartDNS 模板改一下，只改这个配置。
-```
-
-Expected skill behavior:
-
-1. Enter Template mode, not one-click global configuration.
-2. Confirm the exact target file `/etc/openclash/config/config-a(2).yaml`.
-3. Run multi-subscription and binding audits first.
-4. Run the single-config template guard.
-5. Verify SmartDNS prerequisites before using the FFAni profile.
-6. Generate a candidate YAML under `/tmp`, lint it, and show a diff.
-7. Preserve `proxies`, `proxy-groups`, and subscription binding.
-8. Ask for approval before overwriting the target file.
-
-Relevant files:
-
-```text
-SKILL.md
-references/template-apply.md
-references/templates-reference.md
-docs/kb/77-single-config-template-apply.md
-templates/ffani-redirhost-smartdns-overlay.yaml
-scripts/openclash_single_config_template_guard.sh
-scripts/openclash_template_apply.py
-scripts/openclash_lint_config.py
-```
-
-## Example 7: Generate one config using Aethersailor Legacy-Safe
-
-User says:
-
-> Use the Aethersailor-Custom_OpenClash_Rules style to generate a candidate config for `/etc/openclash/config/config-a(2).yaml`. Do not modify other YAML files, do not merge subscriptions, and do not modify network/dhcp/firewall.
-
-Expected skill route:
-
-1. Enter Template mode.
-2. Enter Aethersailor Legacy-Safe adapter guard.
-3. Audit multi-subscription and binding status.
-4. Run `openclash_aethersailor_legacy_audit.sh`.
-5. Generate candidate with `openclash_template_apply.py --template aethersailor-legacy-safe`.
-6. Lint candidate and report diff.
-7. Wait for explicit user approval before writing back.
-
-Example commands:
+## Example 1: Read-only diagnosis
 
 ```sh
-TARGET_FILE="/etc/openclash/config/config-a(2).yaml"
+sh scripts/openclash_diagnose.sh
+```
+
+## Example 2: Backup before a candidate workflow
+
+```sh
+sh scripts/openclash_backup.sh
+```
+
+## Example 3: DNS audit
+
+```sh
+sh scripts/openclash_dns_audit.sh
+```
+
+## Example 4: Multi-subscription guard
+
+```sh
 sh scripts/openclash_multisub_audit.sh
 sh scripts/openclash_subscription_binding_audit.sh
-TARGET_FILE="$TARGET_FILE" sh scripts/openclash_single_config_template_guard.sh
-TARGET_FILE="$TARGET_FILE" sh scripts/openclash_aethersailor_legacy_audit.sh
-python3 scripts/openclash_template_apply.py \
-  --target "$TARGET_FILE" \
-  --template aethersailor-legacy-safe \
-  --candidate /tmp/config-a2.aethersailor-legacy-safe.candidate.yaml
-python3 scripts/openclash_lint_config.py /tmp/config-a2.aethersailor-legacy-safe.candidate.yaml
 ```
 
-## Example 8: Generate one config using Aethersailor Current-Safe
-
-User says:
-
-> 按 yjw8448/Aethersailor-Custom_OpenClash_Rules 的最新思路，给 `/etc/openclash/config/config-a(2).yaml` 生成候选配置。不要覆盖原文件，不要改系统配置，不要合并订阅。
-
-Expected skill behavior:
-
-1. Enter Template mode.
-2. Enter Aethersailor Current-Safe adapter guard.
-3. Read `references/aethersailor-current-safe.md` and `references/aethersailor-source-snapshot.md`.
-4. Audit multi-subscription and binding state.
-5. Audit remote dependencies with `openclash_aethersailor_remote_audit.sh`, but default to local templates if anything is unsafe.
-6. Generate candidate only:
+## Example 5: Generate Aethersailor current-safe candidate
 
 ```sh
-TARGET_FILE="/etc/openclash/config/config-a(2).yaml"
-python3 scripts/openclash_template_apply.py \
-  --target "$TARGET_FILE" \
-  --template aethersailor-current-safe \
-  --candidate /tmp/config-a2.aethersailor-current-safe.candidate.yaml
+TARGET_FILE=/etc/openclash/config/provider-a.yaml   sh scripts/openclash_single_config_template_guard.sh
+
+python3 scripts/openclash_template_apply.py   --target /etc/openclash/config/provider-a.yaml   --template aethersailor-current-safe   --candidate /tmp/provider-a.safeops.candidate.yaml
 ```
 
-Relevant files:
+## Example 6: Validate candidate
 
-```text
-references/aethersailor-current-safe.md
-references/aethersailor-source-snapshot.md
-docs/kb/79-aethersailor-current-safe-config-generation.md
-scripts/openclash_aethersailor_remote_audit.sh
-scripts/openclash_template_apply.py
-templates/aethersailor-current-safe-overlay.yaml
+```sh
+python3 scripts/openclash_lint_config.py /tmp/provider-a.safeops.candidate.yaml
+python3 scripts/openclash_group_detect.py /tmp/provider-a.safeops.candidate.yaml --env
 ```
 
+## Example 7: Apply after explicit approval
 
-## Example 9: Active config switches back to another provider
-
-User says:
-
-```text
-我切换到 config-a(2).yaml 之后，一会儿又自动变回 config-b.yaml。
+```sh
+I_UNDERSTAND_TARGETED_WRITE=1 python3 scripts/openclash_template_apply.py   --target /etc/openclash/config/provider-a.yaml   --template aethersailor-current-safe   --candidate /tmp/provider-a.safeops.candidate.yaml   --apply
 ```
 
-Expected skill behavior:
+## Example 8: Emergency restore when SSH still works
 
-1. Stop normal repair and do not rewrite `config_update_url` blindly.
-2. Run `openclash_active_binding_audit.sh`.
-3. Check `config_path`, `config_update_url`, and `auto_update` with redaction.
-4. Ask which provider should be the current auto-update target.
-5. Back up before changing `/etc/config/openclash`.
-6. Do not modify network/dhcp/firewall.
-
-Relevant files:
-
-```text
-scripts/openclash_active_binding_audit.sh
-docs/kb/82-active-config-update-url-binding.md
-references/reporting.md
+```sh
+I_UNDERSTAND_SAFEOPS_WRITE=1 sh scripts/openclash_emergency_restore.sh --apply
 ```
 
-## Example 10: Fix report is stale or not updating
+## Example 9: Generate a redacted report
 
-User says:
-
-```text
-openclash_fix_report.md 老是不更新。
+```sh
+python3 scripts/openclash_report_writer.py --output-dir . --stdin-notes
 ```
 
-Expected skill behavior:
+## Example 10: Local SSH helper hygiene
 
-1. Enter Reporting mode.
-2. Determine whether the report is local or router-side.
-3. Generate both `openclash_fix_report.md` and `openclash_fix_report_YYYYmmdd-HHMMSS.md`.
-4. Redact subscription URLs, passwords, tokens, API keys, Bearer tokens, and dashboard paths.
-5. Print report paths and `Generated At` time.
-
-Relevant files:
-
-```text
-scripts/openclash_report_writer.py
-scripts/openclash_redact.py
-references/reporting.md
-docs/kb/81-report-generation-and-sync.md
-```
-
-## Example 11: Audit reusable local SSH helper scripts
-
-User says:
-
-```text
-WorkBuddy 之前生成过 ssh_connect.py，后面可能还要用，不要删除，只检查有没有泄露密码或订阅链接。
-```
-
-Expected skill behavior:
-
-1. Enter local helper hygiene mode, not cleanup/delete mode.
-2. Locate reusable helper scripts such as `ssh_connect.py` and report their paths.
-3. Do not delete them automatically.
-4. Audit for embedded router passwords, subscription URLs, tokens, API keys, and Bearer tokens.
-5. Redact any findings before displaying output.
-6. Recommend deletion or editing only if the user explicitly asks.
-
-Relevant files:
-
-```text
-docs/kb/83-local-ssh-helper-hygiene.md
-scripts/openclash_redact.py
-references/reporting.md
-```
-
+Do not paste raw subscription URLs, passwords, tokens, or dashboard secrets into shared logs. Run diagnostics, redact output, and then share the generated report.

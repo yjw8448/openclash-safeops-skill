@@ -1,10 +1,7 @@
-payload:
-  - DOMAIN-SUFFIX,github.com
-  - DOMAIN-SUFFIX,githubusercontent.com
-  - DOMAIN-SUFFIX,githubassets.com
-  - DOMAIN-SUFFIX,ghcr.io
-  - DOMAIN-SUFFIX,docker.com
-  - DOMAIN-SUFFIX,docker.io
-  - DOMAIN-SUFFIX,npmjs.org
-  - DOMAIN-SUFFIX,pypi.org
-  - DOMAIN-SUFFIX,pythonhosted.org
+rules:
+  - DOMAIN-SUFFIX,github.com,PROXY
+  - DOMAIN-SUFFIX,githubusercontent.com,PROXY
+  - DOMAIN-SUFFIX,githubassets.com,PROXY
+  - DOMAIN-SUFFIX,docker.com,PROXY
+  - DOMAIN-SUFFIX,npmjs.org,PROXY
+  - DOMAIN-SUFFIX,pypi.org,PROXY

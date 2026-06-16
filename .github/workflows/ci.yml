@@ -1,0 +1,55 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  repository-hygiene:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.x"
+
+      - name: Install lint tools
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install pyyaml yamllint
+          sudo apt-get update
+          sudo apt-get install -y shellcheck
+
+      - name: Check no Python bytecode is tracked or packaged
+        run: |
+          bad_files="$(find . \( -path '*/__pycache__' -o -name '*.pyc' -o -name '*.pyo' -o -name '*.pyd' \) -print)"
+          if [ -n "$bad_files" ]; then
+            echo "Python bytecode/cache files must not be committed:"
+            echo "$bad_files"
+            exit 1
+          fi
+
+      - name: Validate SKILL.md frontmatter
+        run: python tools/check_skill_frontmatter.py SKILL.md
+
+      - name: Compile Python helpers
+        run: |
+          py_files="$(find scripts tools -type f -name '*.py' -print)"
+          if [ -n "$py_files" ]; then
+            python -m py_compile $py_files
+          fi
+
+      - name: Lint YAML templates and workflow files
+        run: |
+          yamllint -c .yamllint templates .github/workflows
+
+      - name: ShellCheck shell scripts
+        run: |
+          sh_files="$(find scripts -type f -name '*.sh' -print)"
+          if [ -n "$sh_files" ]; then
+            shellcheck -x $sh_files
+          fi

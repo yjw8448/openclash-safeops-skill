@@ -1,0 +1,434 @@
+{
+  "name": "openclash-safeops-skill",
+  "version": "7.7",
+  "files": [
+    {
+      "path": ".editorconfig",
+      "size": 236
+    },
+    {
+      "path": ".github/workflows/ci.yml",
+      "size": 1522
+    },
+    {
+      "path": ".gitignore",
+      "size": 470
+    },
+    {
+      "path": ".prettierrc",
+      "size": 100
+    },
+    {
+      "path": ".yamllint",
+      "size": 180
+    },
+    {
+      "path": "LICENSE",
+      "size": 1064
+    },
+    {
+      "path": "README.md",
+      "size": 9165
+    },
+    {
+      "path": "SKILL.md",
+      "size": 12786
+    },
+    {
+      "path": "WORKBUDDY_REVIEW_NOTES.md",
+      "size": 880
+    },
+    {
+      "path": "docs/kb/00-kb-index.md",
+      "size": 596
+    },
+    {
+      "path": "docs/kb/10-symptom-router.md",
+      "size": 300
+    },
+    {
+      "path": "docs/kb/20-safety-boundaries.md",
+      "size": 275
+    },
+    {
+      "path": "docs/kb/30-openclash-official-wiki.md",
+      "size": 278
+    },
+    {
+      "path": "docs/kb/31-openwrt-operational-safety.md",
+      "size": 2973
+    },
+    {
+      "path": "docs/kb/32-mihomo-schema-compatibility.md",
+      "size": 2892
+    },
+    {
+      "path": "docs/kb/40-aethersailor-fakeip-profile.md",
+      "size": 186
+    },
+    {
+      "path": "docs/kb/50-ffani-redirhost-smartdns-profile.md",
+      "size": 193
+    },
+    {
+      "path": "docs/kb/60-dns-decision-tree.md",
+      "size": 249
+    },
+    {
+      "path": "docs/kb/70-subscription-decision-tree.md",
+      "size": 236
+    },
+    {
+      "path": "docs/kb/75-multi-subscription-decision-tree.md",
+      "size": 205
+    },
+    {
+      "path": "docs/kb/76-unbound-config-decision-tree.md",
+      "size": 201
+    },
+    {
+      "path": "docs/kb/77-single-config-template-apply.md",
+      "size": 169
+    },
+    {
+      "path": "docs/kb/79-aethersailor-current-safe-config-generation.md",
+      "size": 206
+    },
+    {
+      "path": "docs/kb/80-rule-design-and-group-mapping.md",
+      "size": 192
+    },
+    {
+      "path": "docs/kb/81-report-generation-and-sync.md",
+      "size": 155
+    },
+    {
+      "path": "docs/kb/82-active-config-update-url-binding.md",
+      "size": 235
+    },
+    {
+      "path": "docs/kb/83-local-ssh-helper-hygiene.md",
+      "size": 184
+    },
+    {
+      "path": "docs/kb/84-upstream-reference-refresh-policy.md",
+      "size": 2220
+    },
+    {
+      "path": "docs/kb/90-luci-navigation-map.md",
+      "size": 204
+    },
+    {
+      "path": "docs/kb/checklists/multi-subscription-prewrite-checklist.md",
+      "size": 157
+    },
+    {
+      "path": "docs/kb/checklists/post-change-checklist.md",
+      "size": 147
+    },
+    {
+      "path": "docs/kb/checklists/pre-change-checklist.md",
+      "size": 159
+    },
+    {
+      "path": "docs/kb/checklists/unbound-config-prewrite-checklist.md",
+      "size": 165
+    },
+    {
+      "path": "docs/kb/checklists/workbuddy-output-checklist.md",
+      "size": 157
+    },
+    {
+      "path": "docs/kb/playbooks/config-lint-and-group-detect.md",
+      "size": 131
+    },
+    {
+      "path": "docs/kb/playbooks/diagnose-first.md",
+      "size": 127
+    },
+    {
+      "path": "docs/kb/playbooks/dns-repair.md",
+      "size": 114
+    },
+    {
+      "path": "docs/kb/playbooks/emergency-restore.md",
+      "size": 140
+    },
+    {
+      "path": "docs/kb/playbooks/fakeip-baseline.md",
+      "size": 91
+    },
+    {
+      "path": "docs/kb/playbooks/no-subscription-info-unbound-config.md",
+      "size": 132
+    },
+    {
+      "path": "docs/kb/playbooks/post-repair-verification.md",
+      "size": 90
+    },
+    {
+      "path": "docs/kb/playbooks/redirhost-smartdns.md",
+      "size": 97
+    },
+    {
+      "path": "docs/kb/playbooks/restore-two-subscriptions.md",
+      "size": 120
+    },
+    {
+      "path": "docs/kb/playbooks/rule-repair.md",
+      "size": 88
+    },
+    {
+      "path": "docs/kb/playbooks/subscription-repair.md",
+      "size": 103
+    },
+    {
+      "path": "docs/kb/source-map.md",
+      "size": 9847
+    },
+    {
+      "path": "examples/usage-examples.md",
+      "size": 1728
+    },
+    {
+      "path": "references/aethersailor-current-safe.md",
+      "size": 419
+    },
+    {
+      "path": "references/aethersailor-legacy-safe.md",
+      "size": 225
+    },
+    {
+      "path": "references/aethersailor-source-snapshot.md",
+      "size": 295
+    },
+    {
+      "path": "references/baseline-profiles.md",
+      "size": 299
+    },
+    {
+      "path": "references/changelog.md",
+      "size": 8343
+    },
+    {
+      "path": "references/common-repairs.md",
+      "size": 268
+    },
+    {
+      "path": "references/document-index.md",
+      "size": 455
+    },
+    {
+      "path": "references/output-format.md",
+      "size": 216
+    },
+    {
+      "path": "references/profiles.md",
+      "size": 192
+    },
+    {
+      "path": "references/reporting.md",
+      "size": 220
+    },
+    {
+      "path": "references/rule-design.md",
+      "size": 185
+    },
+    {
+      "path": "references/scripts-reference.md",
+      "size": 267
+    },
+    {
+      "path": "references/skill-authoring.md",
+      "size": 2750
+    },
+    {
+      "path": "references/template-apply.md",
+      "size": 266
+    },
+    {
+      "path": "references/templates-reference.md",
+      "size": 193
+    },
+    {
+      "path": "references/upstream-sources.md",
+      "size": 6252
+    },
+    {
+      "path": "references/wiki-mapping.md",
+      "size": 188
+    },
+    {
+      "path": "scripts/lib_safeops.sh",
+      "size": 2625
+    },
+    {
+      "path": "scripts/openclash_active_binding_audit.sh",
+      "size": 758
+    },
+    {
+      "path": "scripts/openclash_aethersailor_legacy_audit.sh",
+      "size": 478
+    },
+    {
+      "path": "scripts/openclash_aethersailor_remote_audit.sh",
+      "size": 334
+    },
+    {
+      "path": "scripts/openclash_backup.sh",
+      "size": 883
+    },
+    {
+      "path": "scripts/openclash_config_fingerprint.py",
+      "size": 1343
+    },
+    {
+      "path": "scripts/openclash_delayed_rollback.sh",
+      "size": 698
+    },
+    {
+      "path": "scripts/openclash_diagnose.sh",
+      "size": 1280
+    },
+    {
+      "path": "scripts/openclash_dns_audit.sh",
+      "size": 951
+    },
+    {
+      "path": "scripts/openclash_emergency_restore.sh",
+      "size": 940
+    },
+    {
+      "path": "scripts/openclash_group_detect.py",
+      "size": 2155
+    },
+    {
+      "path": "scripts/openclash_kb_lookup.sh",
+      "size": 398
+    },
+    {
+      "path": "scripts/openclash_lint_config.py",
+      "size": 2746
+    },
+    {
+      "path": "scripts/openclash_multisub_audit.sh",
+      "size": 617
+    },
+    {
+      "path": "scripts/openclash_multisub_guard.sh",
+      "size": 516
+    },
+    {
+      "path": "scripts/openclash_no_subinfo_audit.sh",
+      "size": 702
+    },
+    {
+      "path": "scripts/openclash_oneclick_config.sh",
+      "size": 937
+    },
+    {
+      "path": "scripts/openclash_quarantine_unbound_config.sh",
+      "size": 880
+    },
+    {
+      "path": "scripts/openclash_redact.py",
+      "size": 1638
+    },
+    {
+      "path": "scripts/openclash_report_writer.py",
+      "size": 2826
+    },
+    {
+      "path": "scripts/openclash_restore_multiconfig.sh",
+      "size": 489
+    },
+    {
+      "path": "scripts/openclash_rollback.sh",
+      "size": 931
+    },
+    {
+      "path": "scripts/openclash_rule_generator.sh",
+      "size": 684
+    },
+    {
+      "path": "scripts/openclash_rule_test.sh",
+      "size": 466
+    },
+    {
+      "path": "scripts/openclash_safe_repair.sh",
+      "size": 520
+    },
+    {
+      "path": "scripts/openclash_single_config_template_guard.sh",
+      "size": 772
+    },
+    {
+      "path": "scripts/openclash_subscription_binding_audit.sh",
+      "size": 530
+    },
+    {
+      "path": "scripts/openclash_subscription_health.sh",
+      "size": 740
+    },
+    {
+      "path": "scripts/openclash_template_apply.py",
+      "size": 3425
+    },
+    {
+      "path": "scripts/openclash_validate_config.sh",
+      "size": 306
+    },
+    {
+      "path": "scripts/openclash_verify_connectivity.sh",
+      "size": 636
+    },
+    {
+      "path": "scripts/openclash_watchdog.sh",
+      "size": 402
+    },
+    {
+      "path": "templates/aethersailor-current-safe-overlay.yaml",
+      "size": 1097
+    },
+    {
+      "path": "templates/aethersailor-legacy-safe-overlay.yaml",
+      "size": 421
+    },
+    {
+      "path": "templates/ffani-redirhost-smartdns-overlay.yaml",
+      "size": 487
+    },
+    {
+      "path": "templates/group-map.env.example",
+      "size": 132
+    },
+    {
+      "path": "templates/oneclick-profile.env.example",
+      "size": 216
+    },
+    {
+      "path": "templates/overwrite-ai-dev.yaml",
+      "size": 461
+    },
+    {
+      "path": "templates/overwrite-safe-basic.yaml",
+      "size": 343
+    },
+    {
+      "path": "templates/redirhost-smartdns-notes.yaml",
+      "size": 358
+    },
+    {
+      "path": "templates/rules-ai-classical.yaml",
+      "size": 213
+    },
+    {
+      "path": "templates/rules-dev-classical.yaml",
+      "size": 231
+    },
+    {
+      "path": "tools/check_skill_frontmatter.py",
+      "size": 1699
+    }
+  ]
+}
